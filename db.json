@@ -26,6 +26,33 @@
       "address": "Manewada",
       "favourite": false,
       "isFavourite": true
+    },
+    {
+      "id": "4",
+      "name": "s1234",
+      "email": "sunit.patil@pinnacle.in",
+      "phone": "3456",
+      "address": "Manewada",
+      "favourite": false,
+      "isFavourite": true
+    },
+    {
+      "id": "5",
+      "name": "s1234",
+      "email": "sunit.patil@pinnacle.in",
+      "phone": "3456",
+      "address": "Manewada",
+      "favourite": false,
+      "isFavourite": true
+    },
+    {
+      "id": "6",
+      "name": "s1234",
+      "email": "sunit.patil@pinnacle.in",
+      "phone": "3456",
+      "address": "Manewada",
+      "favourite": false,
+      "isFavourite": true
     }
   ]
 }
