@@ -1,0 +1,31 @@
+{
+  "contacts": [
+    {
+      "id": "1",
+      "name": "c",
+      "email": "chhaya@gmail.com",
+      "favourite": true,
+      "phone": "34264765",
+      "address": "fgxbhg",
+      "isFavourite": true
+    },
+    {
+      "id": "2",
+      "name": "s1234",
+      "email": "sunit.patil@pinnacle.in",
+      "phone": "3456",
+      "address": "Manewada",
+      "favourite": true,
+      "isFavourite": true
+    },
+    {
+      "id": "3",
+      "name": "s1234",
+      "email": "sunit.patil@pinnacle.in",
+      "phone": "3456",
+      "address": "Manewada",
+      "favourite": false,
+      "isFavourite": true
+    }
+  ]
+}
