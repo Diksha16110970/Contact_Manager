@@ -14,8 +14,10 @@ import {
 import CloseIcon from "@mui/icons-material/Close";
 import PersonIcon from "@mui/icons-material/Person";
 import { useForm, Controller } from "react-hook-form";
+import { useAddContact, useUpdateContact } from "../hooks/useContacts";
+import { useQueryClient } from "@tanstack/react-query";
 
-export default function AddContactButton({ onSubmitContact, currentUser, open, setOpen }) {
+export default function ContactForm({ currentUser, open, setOpen, onAddSuccess, onUpdateSuccess }) {
   const {
     handleSubmit,
     control,
@@ -31,6 +33,22 @@ export default function AddContactButton({ onSubmitContact, currentUser, open, s
       isFavourite: false,
     },
   });
+
+  const addContactMutation = useAddContact();
+  const updateContactMutation = useUpdateContact();
+  const queryClient = useQueryClient();
+
+  useEffect(() => {
+    if (!open) {
+      reset({
+        name: "",
+        email: "",
+        phone: "",
+        address: "",
+        isFavourite: false,
+      });
+    }
+  }, [open, reset]);
 
   useEffect(() => {
     if (currentUser && open) {
@@ -48,8 +66,60 @@ export default function AddContactButton({ onSubmitContact, currentUser, open, s
     setOpen(false);
   };
 
-  const onSubmit = (data) => {
-    onSubmitContact(data);
+  const onSubmit = async (data) => {
+    try {
+      if (currentUser) {
+        console.log("Updating contact with ID:", currentUser.id); // Debug log
+        updateContactMutation.mutate(
+          {
+            ...currentUser,
+            name: data.name,
+            email: data.email,
+            phone: data.phone,
+            address: data.address,
+            favourite: data.isFavourite,
+          },
+          {
+            onSuccess: () => {
+              onUpdateSuccess();
+              // Refetch with the correct query key including page and search
+              queryClient.refetchQueries(["contacts", 1, ""]); // Adjust page and search as needed
+              setOpen(false);
+            },
+            onError: (error) => {
+              console.error("Error updating contact:", error.message || error);
+              if (error.response && error.response.status === 404) {
+                console.error("Contact not found with ID:", currentUser.id);
+              }
+            },
+          }
+        );
+      } else {
+        addContactMutation.mutate(
+          {
+            id: Date.now(),
+            name: data.name,
+            email: data.email,
+            phone: data.phone,
+            address: data.address,
+            favourite: data.isFavourite,
+            selected: false,
+          },
+          {
+            onSuccess: () => {
+              onAddSuccess();
+              queryClient.refetchQueries(["contacts", 1, ""]); // Adjust page and search as needed
+              setOpen(false);
+            },
+            onError: (error) => {
+              console.error("Error adding contact:", error.message || error);
+            },
+          }
+        );
+      }
+    } catch (error) {
+      console.error("Error submitting contact:", error.message || error);
+    }
   };
 
   return (

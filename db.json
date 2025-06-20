@@ -11,7 +11,7 @@
     },
     {
       "id": "2",
-      "name": "s1234",
+      "name": "sami",
       "email": "sunit.patil@pinnacle.in",
       "phone": "3456",
       "address": "Manewada",
@@ -37,22 +37,31 @@
       "isFavourite": true
     },
     {
-      "id": "5",
-      "name": "s1234",
-      "email": "sunit.patil@pinnacle.in",
-      "phone": "3456",
-      "address": "Manewada",
+      "id": "1750420665495",
+      "name": "diksha",
+      "email": "diksha.nagdevate@pinnacle.in",
+      "phone": "2345",
+      "address": "asd",
       "favourite": false,
-      "isFavourite": true
+      "selected": false
     },
     {
-      "id": "6",
-      "name": "s1234",
+      "id": "1750420864364",
+      "name": "ayu",
+      "email": "ayush@gmail.com",
+      "phone": "7972780715",
+      "address": "nagpur",
+      "favourite": false,
+      "selected": false
+    },
+    {
+      "id": "1750423120043",
+      "name": "x",
       "email": "sunit.patil@pinnacle.in",
-      "phone": "3456",
+      "phone": "12345",
       "address": "Manewada",
       "favourite": false,
-      "isFavourite": true
+      "selected": false
     }
   ]
 }

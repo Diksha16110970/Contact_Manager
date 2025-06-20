@@ -1,15 +1,14 @@
-// src/hooks/useContacts.js
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import {
   fetchContacts,
   addContact,
   updateContact,
   deleteContact,
-} from '../api/contactApi';
+} from "../api/contactApi";
 
 export const useContacts = (page, search) => {
   return useQuery({
-    queryKey: ['contacts', page, search],
+    queryKey: ["contacts", page, search],
     queryFn: () => fetchContacts({ page, limit: 10, search }),
     keepPreviousData: true,
   });
@@ -20,7 +19,7 @@ export const useAddContact = () => {
   return useMutation({
     mutationFn: addContact,
     onSuccess: () => {
-      queryClient.invalidateQueries(['contacts']);
+      queryClient.invalidateQueries(["contacts"]);
     },
   });
 };
@@ -30,7 +29,7 @@ export const useUpdateContact = () => {
   return useMutation({
     mutationFn: updateContact,
     onSuccess: () => {
-      queryClient.invalidateQueries(['contacts']);
+      queryClient.invalidateQueries(["contacts"]);
     },
   });
 };
@@ -40,17 +39,17 @@ export const useDeleteContact = () => {
   return useMutation({
     mutationFn: deleteContact,
     onSuccess: () => {
-      queryClient.invalidateQueries(['contacts']);
-    },
-  });
-};
-export const useToggleFavorite = () => {
-  const queryClient = useQueryClient();
-  return useMutation({
-    mutationFn: deleteContact,
-    onSuccess: () => {
-      queryClient.invalidateQueries(['contacts']);
+      queryClient.invalidateQueries(["contacts"]);
     },
   });
 };
 
+export const useToggleFavorite = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: updateContact, // Fixed to use updateContact
+    onSuccess: () => {
+      queryClient.invalidateQueries(["contacts"]);
+    },
+  });
+};

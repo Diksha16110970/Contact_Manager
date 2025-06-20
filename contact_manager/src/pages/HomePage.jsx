@@ -1,35 +1,48 @@
-import React from "react";
-import { Box, Typography, TextField, Checkbox, Button } from "@mui/material";
+import React, { useState } from "react";
+import { Box, Typography, TextField, Checkbox } from "@mui/material";
 import { useContactStore } from "../store/useContactStore";
-import { useContacts } from "../hooks/useContacts";
-import ContactList from "../components/contactList"; // ✅ Correct import
+import { useContacts, useUpdateContact, useDeleteContact } from "../hooks/useContacts";
+import ContactList from "../components/contactList";
+import ContactForm from "../components/contactForm";
+import { useSnackbar } from "notistack";
 
 export default function HomePage() {
   const { searchInput, setSearchInput, showFavouritesOnly, setShowFavouritesOnly } = useContactStore();
-  const { data, isLoading } = useContacts();
+  const { data, isLoading } = useContacts(1, searchInput); // Added refetch
   const contacts = data?.data || [];
+  // const addContactMutation = useAddContact();
+  const updateContactMutation = useUpdateContact();
+  const deleteContactMutation = useDeleteContact();
+  const { enqueueSnackbar } = useSnackbar();
+
+  const [isFormOpen, setIsFormOpen] = useState(false);
+  const [currentUser, setCurrentUser] = useState(null);
 
   const filteredContacts = showFavouritesOnly
-    ? contacts.filter(
-        (c) =>
-          c.favourite &&
-          c.name.toLowerCase().includes(searchInput.toLowerCase())
-      )
-    : contacts.filter((c) =>
-        c.name.toLowerCase().includes(searchInput.toLowerCase())
-      );
+    ? contacts.filter((c) => c.favourite && c.name.toLowerCase().includes(searchInput.toLowerCase()))
+    : contacts.filter((c) => c.name.toLowerCase().includes(searchInput.toLowerCase()));
 
-  // Stub functions if edit/delete/favorite aren't needed yet
   const handleEdit = (contact) => {
-    console.log("Edit:", contact);
+    setCurrentUser(contact);
+    setIsFormOpen(true);
   };
 
   const handleDelete = (contactId) => {
-    console.log("Delete:", contactId);
+    deleteContactMutation.mutate(contactId, {
+      onSuccess: () => enqueueSnackbar("Contact deleted successfully!", { variant: "success" }),
+      // onError: (error) => enqueueSnackbar("Failed to delete contact", { variant: "error" }),
+    });
   };
 
   const handleToggleFavorite = (contactId) => {
-    console.log("Toggle Favorite:", contactId);
+    const contact = contacts.find((c) => c.id === contactId);
+    if (contact) {
+      const updatedContact = { ...contact, favourite: !contact.favourite };
+      updateContactMutation.mutate(updatedContact, {
+        onSuccess: () => enqueueSnackbar("Favorite status updated successfully!", { variant: "success" }),
+        // onError: (error) => enqueueSnackbar("Failed to update favorite status", { variant: "error" }),
+      });
+    }
   };
 
   return (
@@ -40,7 +53,7 @@ export default function HomePage() {
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
-        background: "#f0f4ff",
+        background: "#ffff",
         overflow: "hidden",
       }}
     >
@@ -61,7 +74,6 @@ export default function HomePage() {
           Contact List
         </Typography>
 
-        {/* Search and filter */}
         <Box sx={{ display: "flex", alignItems: "center", mb: 2, width: "100%" }}>
           <TextField
             label="Search contact"
@@ -78,7 +90,6 @@ export default function HomePage() {
           <Typography>Show Favourites</Typography>
         </Box>
 
-        {/* Contact List */}
         {isLoading ? (
           <Typography sx={{ textAlign: "center" }}>Loading...</Typography>
         ) : filteredContacts.length === 0 ? (
@@ -86,15 +97,19 @@ export default function HomePage() {
         ) : (
           <ContactList
             contacts={filteredContacts}
-            onEdit={handleEdit}
-            onDelete={handleDelete}
+            onUpdateContact={handleEdit}
+            onDeleteContact={handleDelete}
             onToggleFavorite={handleToggleFavorite}
           />
         )}
 
-        <Button variant="contained" sx={{ mt: 2, backgroundColor: "#ADD8E6" }}>
-          + ADD CONTACT
-        </Button>
+        <ContactForm
+          currentUser={currentUser}
+          open={isFormOpen}
+          setOpen={setIsFormOpen}
+          onAddSuccess={() => enqueueSnackbar("Contact added successfully!", { variant: "success" })}
+          onUpdateSuccess={() => enqueueSnackbar("Contact updated successfully!", { variant: "success" })}
+        />
       </Box>
     </Box>
   );
