@@ -1,13 +1,22 @@
 import React, { useState } from "react";
-import { Box, Typography, TextField, Checkbox } from "@mui/material";
+import { Box, Typography, TextField, Checkbox, Switch } from "@mui/material";
 import { useContactStore } from "../store/useContactStore";
-import { useContacts, useUpdateContact, useDeleteContact } from "../hooks/useContacts";
+import {
+  useContacts,
+  useUpdateContact,
+  useDeleteContact,
+} from "../hooks/useContacts";
 import ContactList from "../components/contactList";
 import ContactForm from "../components/contactForm";
 import { useSnackbar } from "notistack";
 
 export default function HomePage() {
-  const { searchInput, setSearchInput, showFavouritesOnly, setShowFavouritesOnly } = useContactStore();
+  const {
+    searchInput,
+    setSearchInput,
+    showFavouritesOnly,
+    setShowFavouritesOnly,
+  } = useContactStore();
   const { data, isLoading } = useContacts(1, searchInput); // Added refetch
   const contacts = data?.data || [];
   // const addContactMutation = useAddContact();
@@ -19,8 +28,14 @@ export default function HomePage() {
   const [currentUser, setCurrentUser] = useState(null);
 
   const filteredContacts = showFavouritesOnly
-    ? contacts.filter((c) => c.favourite && c.name.toLowerCase().includes(searchInput.toLowerCase()))
-    : contacts.filter((c) => c.name.toLowerCase().includes(searchInput.toLowerCase()));
+    ? contacts.filter(
+        (c) =>
+          c.favourite &&
+          c.name.toLowerCase().includes(searchInput.toLowerCase())
+      )
+    : contacts.filter((c) =>
+        c.name.toLowerCase().includes(searchInput.toLowerCase())
+      );
 
   const handleEdit = (contact) => {
     setCurrentUser(contact);
@@ -29,7 +44,10 @@ export default function HomePage() {
 
   const handleDelete = (contactId) => {
     deleteContactMutation.mutate(contactId, {
-      onSuccess: () => enqueueSnackbar("Contact deleted successfully!", { variant: "success" }),
+      onSuccess: () =>
+        enqueueSnackbar("Contact deleted successfully!", {
+          variant: "success",
+        }),
       // onError: (error) => enqueueSnackbar("Failed to delete contact", { variant: "error" }),
     });
   };
@@ -39,7 +57,10 @@ export default function HomePage() {
     if (contact) {
       const updatedContact = { ...contact, favourite: !contact.favourite };
       updateContactMutation.mutate(updatedContact, {
-        onSuccess: () => enqueueSnackbar("Favorite status updated successfully!", { variant: "success" }),
+        onSuccess: () =>
+          enqueueSnackbar("Favorite status updated successfully!", {
+            variant: "success",
+          }),
         // onError: (error) => enqueueSnackbar("Failed to update favorite status", { variant: "error" }),
       });
     }
@@ -70,11 +91,16 @@ export default function HomePage() {
           alignItems: "center",
         }}
       >
-        <Typography variant="h6" sx={{ fontWeight: "bold", mb: 2, color: "#333", textAlign: "center" }}>
+        <Typography
+          variant="h6"
+          sx={{ fontWeight: "bold", mb: 2, color: "#333", textAlign: "center" }}
+        >
           Contact List
         </Typography>
 
-        <Box sx={{ display: "flex", alignItems: "center", mb: 2, width: "100%" }}>
+        <Box
+          sx={{ display: "flex", alignItems: "center", mb: 2, width: "100%" }}
+        >
           <TextField
             label="Search contact"
             variant="outlined"
@@ -83,17 +109,20 @@ export default function HomePage() {
             fullWidth
             sx={{ mr: 1 }}
           />
-          <Checkbox
+          <Switch
             checked={showFavouritesOnly}
             onChange={(e) => setShowFavouritesOnly(e.target.checked)}
+            inputProps={{ "aria-label": "Show favourites only" }}
           />
-          <Typography>Show Favourites</Typography>
+          <Typography sx={{ ml: 1 }}>Show Favourites</Typography>
         </Box>
 
         {isLoading ? (
           <Typography sx={{ textAlign: "center" }}>Loading...</Typography>
         ) : filteredContacts.length === 0 ? (
-          <Typography sx={{ textAlign: "center" }}>No contacts found</Typography>
+          <Typography sx={{ textAlign: "center" }}>
+            No contacts found
+          </Typography>
         ) : (
           <ContactList
             contacts={filteredContacts}
@@ -107,8 +136,16 @@ export default function HomePage() {
           currentUser={currentUser}
           open={isFormOpen}
           setOpen={setIsFormOpen}
-          onAddSuccess={() => enqueueSnackbar("Contact added successfully!", { variant: "success" })}
-          onUpdateSuccess={() => enqueueSnackbar("Contact updated successfully!", { variant: "success" })}
+          onAddSuccess={() =>
+            enqueueSnackbar("Contact added successfully!", {
+              variant: "success",
+            })
+          }
+          onUpdateSuccess={() =>
+            enqueueSnackbar("Contact updated successfully!", {
+              variant: "success",
+            })
+          }
         />
       </Box>
     </Box>

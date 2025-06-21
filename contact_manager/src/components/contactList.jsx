@@ -1,16 +1,25 @@
-import React, { useState } from "react";
+import FavoriteIcon from "@mui/icons-material/Favorite";
+import EditIcon from "@mui/icons-material/Edit";
+import DeleteIcon from "@mui/icons-material/Delete";
+import { useState } from "react";
 import {
+  Avatar,
   Box,
-  Typography,
-  Checkbox,
+  Button,
   Dialog,
   DialogActions,
   DialogContent,
   DialogContentText,
-  Button,
+  IconButton,
+  Typography,
 } from "@mui/material";
 
-export default function ContactList({ contacts, onUpdateContact, onDeleteContact }) {
+export default function ContactList({
+  contacts,
+  onUpdateContact,
+  onDeleteContact,
+  onToggleFavorite,
+}) {
   const [openDialog, setOpenDialog] = useState(false);
   const [selectedContact, setSelectedContact] = useState(null);
   const [deleteConfirmOpen, setDeleteConfirmOpen] = useState(false);
@@ -28,7 +37,7 @@ export default function ContactList({ contacts, onUpdateContact, onDeleteContact
 
   const handleEditClick = () => {
     if (onUpdateContact && selectedContact) {
-      onUpdateContact(selectedContact); // This will open ContactForm in HomePage
+      onUpdateContact(selectedContact);
       handleCloseDialog();
     }
   };
@@ -42,18 +51,6 @@ export default function ContactList({ contacts, onUpdateContact, onDeleteContact
       onDeleteContact(selectedContact.id);
     }
     handleCloseDialog();
-  };
-
-  const handleCheckboxChange = (contactId) => {
-    if (onUpdateContact) {
-      const contact = contacts.find((c) => c.id === contactId);
-      if (contact) {
-        onUpdateContact({
-          ...contact,
-          selected: !contact.selected,
-        });
-      }
-    }
   };
 
   return (
@@ -73,21 +70,48 @@ export default function ContactList({ contacts, onUpdateContact, onDeleteContact
           }}
         >
           <Box sx={{ display: "flex", alignItems: "center" }}>
-            <Checkbox
-              checked={contact.selected || false}
-              onChange={() => handleCheckboxChange(contact.id)}
-            />
-            <Typography>{contact.name}</Typography>
-            <Typography sx={{ ml: 1 }}>{contact.email}</Typography>
+            {/* Dummy Profile Avatar */}
+            <Avatar
+              alt={contact.name}
+              src={`https://ui-avatars.com/api/?name=${contact.name}&background=random`}
+            >
+              {contact.name.charAt(0).toUpperCase()}
+            </Avatar>
+
+            <Box sx={{ display: "flex", flexDirection: "column", ml: 1 }}>
+              <Typography variant="subtitle1">{contact.name}</Typography>
+              <Typography variant="body2" color="text.secondary">
+                {contact.email}
+              </Typography>
+            </Box>
           </Box>
-          <Button size="small" onClick={() => handleDetailsClick(contact)}>
-            Details
-          </Button>
+
+          <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+            {/* Favorite Icon */}
+            <IconButton
+              onClick={() => onToggleFavorite(contact.id)}
+              size="small"
+            >
+              <FavoriteIcon
+                color={contact.favourite ? "warning" : "disabled"}
+              />
+            </IconButton>
+
+            {/* Details Button */}
+            <Button size="small" onClick={() => handleDetailsClick(contact)}>
+              Details
+            </Button>
+          </Box>
         </Box>
       ))}
 
       {/* Details Dialog */}
-      <Dialog open={openDialog && !deleteConfirmOpen} onClose={handleCloseDialog} maxWidth="sm" fullWidth>
+      <Dialog
+        open={openDialog && !deleteConfirmOpen}
+        onClose={handleCloseDialog}
+        maxWidth="sm"
+        fullWidth
+      >
         <DialogContent>
           <DialogContentText>
             {selectedContact && (
@@ -102,8 +126,15 @@ export default function ContactList({ contacts, onUpdateContact, onDeleteContact
                   <Typography sx={{ mb: 1 }}>
                     <strong>Email:</strong> {selectedContact.email}
                   </Typography>
+                  <Typography sx={{ mb: 1 }}>
+                    <strong>Phone:</strong> {selectedContact.phone}
+                  </Typography>
+                  <Typography sx={{ mb: 1 }}>
+                    <strong>Phone:</strong> {selectedContact.phone}
+                  </Typography>
                   <Typography>
-                    <strong>Favourite:</strong> {selectedContact.favourite ? "Yes" : "No"}
+                    <strong>Favourite:</strong>{" "}
+                    {selectedContact.favourite ? "Yes" : "No"}
                   </Typography>
                 </Box>
               </Box>
@@ -131,12 +162,13 @@ export default function ContactList({ contacts, onUpdateContact, onDeleteContact
               Confirm Delete
             </Typography>
             <Typography>
-              Are you sure you want to delete "{selectedContact?.name}"? This action cannot be undone.
+              Are you sure you want to delete "{selectedContact?.name}"? This
+              action cannot be undone.
             </Typography>
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button onClick={() => setDeleteConfirmOpen(false)} sx={{ color: "#666" }}>
+          <Button onClick={handleCloseDialog} sx={{ color: "#666" }}>
             Cancel
           </Button>
           <Button onClick={handleConfirmDelete} sx={{ color: "#dc3545" }}>
