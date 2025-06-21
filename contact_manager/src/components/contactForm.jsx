@@ -16,8 +16,15 @@ import PersonIcon from "@mui/icons-material/Person";
 import { useForm, Controller } from "react-hook-form";
 import { useAddContact, useUpdateContact } from "../hooks/useContacts";
 import { useQueryClient } from "@tanstack/react-query";
+import { useSnackbar } from "notistack";
 
-export default function ContactForm({ currentUser, open, setOpen, onAddSuccess, onUpdateSuccess }) {
+export default function ContactForm({
+  currentUser,
+  open,
+  setOpen,
+  onAddSuccess,
+  onUpdateSuccess,
+}) {
   const {
     handleSubmit,
     control,
@@ -33,10 +40,11 @@ export default function ContactForm({ currentUser, open, setOpen, onAddSuccess, 
       isFavourite: false,
     },
   });
-
+   console.log(`currentUser == ${JSON.stringify(currentUser)}`);
   const addContactMutation = useAddContact();
   const updateContactMutation = useUpdateContact();
   const queryClient = useQueryClient();
+  const { enqueueSnackbar } = useSnackbar();
 
   useEffect(() => {
     if (!open) {
@@ -69,7 +77,8 @@ export default function ContactForm({ currentUser, open, setOpen, onAddSuccess, 
   const onSubmit = async (data) => {
     try {
       if (currentUser) {
-        console.log("Updating contact with ID:", currentUser.id); // Debug log
+       
+        
         updateContactMutation.mutate(
           {
             ...currentUser,
@@ -81,16 +90,16 @@ export default function ContactForm({ currentUser, open, setOpen, onAddSuccess, 
           },
           {
             onSuccess: () => {
-              onUpdateSuccess();
-              // Refetch with the correct query key including page and search
-              queryClient.refetchQueries(["contacts", 1, ""]); // Adjust page and search as needed
+              enqueueSnackbar("Contact updated successfully!", {
+                variant: "success",
+              });
+              onUpdateSuccess?.();
+              queryClient.refetchQueries(["contacts", 1, ""]);
               setOpen(false);
             },
             onError: (error) => {
+              enqueueSnackbar("Error updating contact", { variant: "error" });
               console.error("Error updating contact:", error.message || error);
-              if (error.response && error.response.status === 404) {
-                console.error("Contact not found with ID:", currentUser.id);
-              }
             },
           }
         );
@@ -103,21 +112,25 @@ export default function ContactForm({ currentUser, open, setOpen, onAddSuccess, 
             phone: data.phone,
             address: data.address,
             favourite: data.isFavourite,
-            selected: false,
           },
           {
             onSuccess: () => {
-              onAddSuccess();
-              queryClient.refetchQueries(["contacts", 1, ""]); // Adjust page and search as needed
+              enqueueSnackbar("Contact added successfully!", {
+                variant: "success",
+              });
+              onAddSuccess?.();
+              queryClient.refetchQueries(["contacts", 1, ""]);
               setOpen(false);
             },
             onError: (error) => {
+              enqueueSnackbar("Error adding contact", { variant: "error" });
               console.error("Error adding contact:", error.message || error);
             },
           }
         );
       }
     } catch (error) {
+      enqueueSnackbar("Unexpected error occurred", { variant: "error" });
       console.error("Error submitting contact:", error.message || error);
     }
   };
@@ -175,7 +188,9 @@ export default function ContactForm({ currentUser, open, setOpen, onAddSuccess, 
                 {currentUser ? "Edit Contact" : "Add New Contact"}
               </Typography>
               <Typography variant="body2">
-                {currentUser ? "Update the contact details below" : "Fill in the details below"}
+                {currentUser
+                  ? "Update the contact details below"
+                  : "Fill in the details below"}
               </Typography>
             </Box>
           </Box>
@@ -184,7 +199,15 @@ export default function ContactForm({ currentUser, open, setOpen, onAddSuccess, 
           </IconButton>
         </Box>
 
-        <DialogContent sx={{ display: "flex", flexDirection: "column", gap: 2, px: 2, py: 2 }}>
+        <DialogContent
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            gap: 2,
+            px: 2,
+            py: 2,
+          }}
+        >
           <Controller
             name="name"
             control={control}
@@ -266,7 +289,11 @@ export default function ContactForm({ currentUser, open, setOpen, onAddSuccess, 
         </DialogContent>
 
         <DialogActions sx={{ px: 2, pb: 2 }}>
-          <Button onClick={handleClose} variant="outlined" sx={{ borderRadius: "4px" }}>
+          <Button
+            onClick={handleClose}
+            variant="outlined"
+            sx={{ borderRadius: "4px" }}
+          >
             Cancel
           </Button>
           <Button

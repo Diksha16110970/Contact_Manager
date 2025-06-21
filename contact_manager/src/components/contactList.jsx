@@ -113,42 +113,90 @@ export default function ContactList({
         fullWidth
       >
         <DialogContent>
-          <DialogContentText>
-            {selectedContact && (
-              <Box>
-                <Typography variant="h6" sx={{ mb: 2 }}>
-                  Contact Details
+          {selectedContact && (
+            <Box sx={{ textAlign: "center", py: 2 }}>
+              <Avatar
+                alt={selectedContact.name}
+                src={`https://ui-avatars.com/api/?name=${selectedContact.name}&background=random`}
+                sx={{ width: 80, height: 80, mx: "auto", mb: 2 }}
+              />
+
+              <Typography variant="h6" sx={{ mb: 2 }}>
+                Contact Details
+              </Typography>
+
+              <Box
+                sx={{
+                  display: "grid",
+                  gap: 1.5,
+                  px: 2,
+                  py: 1,
+                  background: "#f9f9f9",
+                  borderRadius: 2,
+                  textAlign: "left",
+                }}
+              >
+                <Typography>
+                  <strong>Name:</strong> {selectedContact.name}
                 </Typography>
-                <Box>
-                  <Typography sx={{ mb: 1 }}>
-                    <strong>Name:</strong> {selectedContact.name}
-                  </Typography>
-                  <Typography sx={{ mb: 1 }}>
-                    <strong>Email:</strong> {selectedContact.email}
-                  </Typography>
-                  <Typography sx={{ mb: 1 }}>
-                    <strong>Phone:</strong> {selectedContact.phone}
-                  </Typography>
-                  <Typography sx={{ mb: 1 }}>
-                    <strong>Phone:</strong> {selectedContact.phone}
-                  </Typography>
-                  <Typography>
-                    <strong>Favourite:</strong>{" "}
-                    {selectedContact.favourite ? "Yes" : "No"}
-                  </Typography>
-                </Box>
+                <Typography>
+                  <strong>Email:</strong> {selectedContact.email}
+                </Typography>
+                <Typography>
+                  <strong>Phone:</strong> {selectedContact.phone || "N/A"}
+                </Typography>
+                <Typography>
+                  <strong>Address:</strong> {selectedContact.address || "N/A"}
+                </Typography>
+                <Typography>
+                  <strong>Favourite:</strong>{" "}
+                  {selectedContact.favourite ? "Yes" : "No"}
+                </Typography>
               </Box>
-            )}
-          </DialogContentText>
+            </Box>
+          )}
         </DialogContent>
-        <DialogActions>
-          <Button onClick={handleEditClick} sx={{ color: "#007bff" }}>
+
+        <DialogActions sx={{ justifyContent: "center", gap: 2, pb: 2 }}>
+          <Button
+            onClick={handleEditClick}
+            variant="contained"
+            sx={{
+              backgroundColor: "#007bff",
+              color: "#fff",
+              "&:hover": { backgroundColor: "#0056b3" },
+              borderRadius: 2,
+              textTransform: "none",
+            }}
+          >
             Edit
           </Button>
-          <Button onClick={handleDeleteClick} sx={{ color: "#dc3545" }}>
+
+          <Button
+            onClick={handleDeleteClick}
+            variant="contained"
+            sx={{
+              backgroundColor: "#dc3545",
+              color: "#fff",
+              "&:hover": { backgroundColor: "#c82333" },
+              borderRadius: 2,
+              textTransform: "none",
+            }}
+          >
             Delete
           </Button>
-          <Button onClick={handleCloseDialog} sx={{ color: "#666" }}>
+
+          <Button
+            onClick={handleCloseDialog}
+            variant="contained"
+            sx={{
+              backgroundColor: "#6c757d",
+              color: "#fff",
+              "&:hover": { backgroundColor: "#5a6268" },
+              borderRadius: 2,
+              textTransform: "none",
+            }}
+          >
             Close
           </Button>
         </DialogActions>

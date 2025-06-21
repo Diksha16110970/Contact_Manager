@@ -1,58 +1,20 @@
 {
   "contacts": [
     {
-      "id": "2",
-      "name": "sami",
-      "email": "sunit.patil@pinnacle.in",
-      "phone": "3456",
-      "address": "Manewada",
-      "favourite": true,
-      "isFavourite": true
+      "id": "1750520810459",
+      "name": "d",
+      "email": "dikshanagdevate9@gmail.com",
+      "phone": "13432",
+      "address": "d",
+      "favourite": false
     },
     {
-      "id": "3",
-      "name": "s1234",
-      "email": "sunit.patil@pinnacle.in",
-      "phone": "3456",
-      "address": "Manewada",
-      "favourite": true,
-      "isFavourite": true
-    },
-    {
-      "id": "4",
-      "name": "s1234",
-      "email": "sunit.patil@pinnacle.in",
-      "phone": "3456",
-      "address": "Manewada",
-      "favourite": false,
-      "isFavourite": true
-    },
-    {
-      "id": "1750420665495",
-      "name": "diksha",
+      "id": "1750521004679",
+      "name": "diksha123",
       "email": "diksha.nagdevate@pinnacle.in",
-      "phone": "2345",
-      "address": "asd",
-      "favourite": false,
-      "selected": false
-    },
-    {
-      "id": "1750420864364",
-      "name": "ayu",
-      "email": "ayush@gmail.com",
-      "phone": "7972780715",
-      "address": "nagpur",
-      "favourite": false,
-      "selected": false
-    },
-    {
-      "id": "1750423120043",
-      "name": "x",
-      "email": "sunit.patil@pinnacle.in",
-      "phone": "12345",
-      "address": "Manewada",
-      "favourite": false,
-      "selected": false
+      "phone": "3242",
+      "address": "sfd",
+      "favourite": true
     }
   ]
 }
