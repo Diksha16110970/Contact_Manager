@@ -95,9 +95,9 @@ export default function ContactForm({
           },
           {
             onSuccess: () => {
-              enqueueSnackbar("Contact updated successfully!", {
-                variant: "success",
-              });
+              // enqueueSnackbar("Contact updated successfully!", {
+              //   variant: "success",
+              // });
               onUpdateSuccess?.();
               queryClient.refetchQueries(["contacts", 1, ""]);
               setOpen(false);
@@ -120,9 +120,9 @@ export default function ContactForm({
           },
           {
             onSuccess: () => {
-              enqueueSnackbar("Contact added successfully!", {
-                variant: "success",
-              });
+              // enqueueSnackbar("Contact added successfully!", {
+              //   variant: "success",
+              // });
               onAddSuccess?.();
               queryClient.refetchQueries(["contacts", 1, ""]);
               setOpen(false);
