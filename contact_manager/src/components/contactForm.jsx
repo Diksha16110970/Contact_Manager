@@ -24,6 +24,7 @@ export default function ContactForm({
   setOpen,
   onAddSuccess,
   onUpdateSuccess,
+  onClose,
 }) {
   const {
     handleSubmit,
@@ -40,11 +41,12 @@ export default function ContactForm({
       isFavourite: false,
     },
   });
-   console.log(`currentUser == ${JSON.stringify(currentUser)}`);
+  console.log(`currentUser == ${JSON.stringify(currentUser)}`);
   const addContactMutation = useAddContact();
   const updateContactMutation = useUpdateContact();
   const queryClient = useQueryClient();
   const { enqueueSnackbar } = useSnackbar();
+  
 
   useEffect(() => {
     if (!open) {
@@ -71,14 +73,13 @@ export default function ContactForm({
   }, [currentUser, open, reset, setValue]);
 
   const handleClose = () => {
-    setOpen(false);
-  };
+  setOpen(false);
+  onClose?.(); // ✅ notify parent to clear currentUser
+};
 
   const onSubmit = async (data) => {
     try {
       if (currentUser) {
-       
-        
         updateContactMutation.mutate(
           {
             ...currentUser,
@@ -137,24 +138,6 @@ export default function ContactForm({
 
   return (
     <>
-      <Button
-        variant="contained"
-        onClick={() => setOpen(true)}
-        sx={{
-          mt: 2,
-          width: "100%",
-          backgroundColor: "#4FC3F7",
-          color: "#fff",
-          "&:hover": { backgroundColor: "#29B6F6" },
-          borderRadius: "8px",
-          fontSize: "16px",
-          padding: "8px",
-          textTransform: "none",
-        }}
-      >
-        + ADD CONTACT
-      </Button>
-
       <Dialog
         open={open}
         onClose={handleClose}

@@ -2,11 +2,11 @@
   "contacts": [
     {
       "id": "1750520810459",
-      "name": "d",
+      "name": "Shraddha",
       "email": "dikshanagdevate9@gmail.com",
       "phone": "13432",
       "address": "d",
-      "favourite": false
+      "favourite": true
     },
     {
       "id": "1750521004679",

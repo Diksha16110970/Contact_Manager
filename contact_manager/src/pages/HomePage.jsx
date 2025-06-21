@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Box, Typography, TextField, Checkbox, Switch } from "@mui/material";
+import { Box, Typography, TextField, Checkbox, Switch, Button } from "@mui/material";
 import { useContactStore } from "../store/useContactStore";
 import {
   useContacts,
@@ -64,6 +64,10 @@ export default function HomePage() {
         // onError: (error) => enqueueSnackbar("Failed to update favorite status", { variant: "error" }),
       });
     }
+  };
+  const handleFormClose = () => {
+    setIsFormOpen(false);
+    setCurrentUser(null); // ✅ clear current user after form close
   };
 
   return (
@@ -132,6 +136,27 @@ export default function HomePage() {
           />
         )}
 
+        <Button
+          variant="contained"
+          onClick={() => {
+            setCurrentUser(null); // ✅ reset user
+            setIsFormOpen(true); // ✅ open blank form
+          }}
+          sx={{
+            mt: 2,
+            width: "100%",
+            backgroundColor: "#4FC3F7",
+            color: "#fff",
+            "&:hover": { backgroundColor: "#29B6F6" },
+            borderRadius: "8px",
+            fontSize: "16px",
+            padding: "8px",
+            textTransform: "none",
+          }}
+        >
+          + ADD CONTACT
+        </Button>
+
         <ContactForm
           currentUser={currentUser}
           open={isFormOpen}
@@ -146,6 +171,7 @@ export default function HomePage() {
               variant: "success",
             })
           }
+          onClose={handleFormClose}
         />
       </Box>
     </Box>
