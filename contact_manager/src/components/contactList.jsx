@@ -202,24 +202,62 @@ export default function ContactList({
         </DialogActions>
       </Dialog>
 
-      {/* Delete Confirmation Dialog */}
-      <Dialog open={deleteConfirmOpen} onClose={handleCloseDialog}>
-        <DialogContent>
-          <DialogContentText>
-            <Typography variant="h6" sx={{ mb: 1 }}>
-              Confirm Delete
-            </Typography>
-            <Typography>
-              Are you sure you want to delete "{selectedContact?.name}"? This
-              action cannot be undone.
-            </Typography>
-          </DialogContentText>
+      <Dialog
+        open={deleteConfirmOpen}
+        onClose={handleCloseDialog}
+        maxWidth="xs"
+        fullWidth
+        PaperProps={{
+          sx: {
+            borderRadius: 2,
+            boxShadow: 4,
+          },
+        }}
+      >
+        <DialogContent sx={{ px: 3, py: 2 }}>
+          <Typography
+            variant="h6"
+            sx={{
+              mb: 1,
+              fontWeight: "bold",
+              color: "#dc3545",
+              textAlign: "center",
+            }}
+          >
+            Confirm Delete
+          </Typography>
+          <Typography sx={{ textAlign: "center", mb: 2 }}>
+            Are you sure you want to delete{" "}
+            <strong>"{selectedContact?.name}"</strong>? This action cannot be
+            undone.
+          </Typography>
         </DialogContent>
-        <DialogActions>
-          <Button onClick={handleCloseDialog} sx={{ color: "#666" }}>
+
+        <DialogActions sx={{ justifyContent: "center", gap: 2, pb: 2 }}>
+          <Button
+            onClick={handleCloseDialog}
+            variant="contained"
+            sx={{
+              backgroundColor: "#6c757d",
+              color: "#fff",
+              "&:hover": { backgroundColor: "#5a6268" },
+              borderRadius: 2,
+              textTransform: "none",
+            }}
+          >
             Cancel
           </Button>
-          <Button onClick={handleConfirmDelete} sx={{ color: "#dc3545" }}>
+          <Button
+            onClick={handleConfirmDelete}
+            variant="contained"
+            sx={{
+              backgroundColor: "#dc3545",
+              color: "#fff",
+              "&:hover": { backgroundColor: "#c82333" },
+              borderRadius: 2,
+              textTransform: "none",
+            }}
+          >
             Delete
           </Button>
         </DialogActions>

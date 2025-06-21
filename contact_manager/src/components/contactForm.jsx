@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useMemo } from "react";
 import {
   Button,
   Dialog,
@@ -25,28 +25,32 @@ export default function ContactForm({
   onAddSuccess,
   onUpdateSuccess,
   onClose,
-}) {
+}) 
+{
+  const defaultValues = useMemo(
+  () => ({
+    name: currentUser?.name || "",
+    email: currentUser?.email || "",
+    phone: currentUser?.phone || "",
+    address: currentUser?.address || "",
+    isFavourite: currentUser?.favourite || false,
+  }),
+  [currentUser]
+);
+
   const {
     handleSubmit,
     control,
     reset,
     setValue,
     formState: { errors },
-  } = useForm({
-    defaultValues: {
-      name: "",
-      email: "",
-      phone: "",
-      address: "",
-      isFavourite: false,
-    },
-  });
+  } = useForm({ defaultValues });
+  
   console.log(`currentUser == ${JSON.stringify(currentUser)}`);
   const addContactMutation = useAddContact();
   const updateContactMutation = useUpdateContact();
   const queryClient = useQueryClient();
   const { enqueueSnackbar } = useSnackbar();
-  
 
   useEffect(() => {
     if (!open) {
@@ -73,9 +77,9 @@ export default function ContactForm({
   }, [currentUser, open, reset, setValue]);
 
   const handleClose = () => {
-  setOpen(false);
-  onClose?.(); // ✅ notify parent to clear currentUser
-};
+    setOpen(false);
+    onClose?.(); // ✅ notify parent to clear currentUser
+  };
 
   const onSubmit = async (data) => {
     try {
@@ -264,7 +268,12 @@ export default function ContactForm({
             control={control}
             render={({ field }) => (
               <FormControlLabel
-                control={<Checkbox {...field} />}
+                control={
+                  <Checkbox
+                    checked={field.value} // ✅ make checkbox controlled
+                    onChange={(e) => field.onChange(e.target.checked)} // ✅ update correctly
+                  />
+                }
                 label="Mark as Favourite"
               />
             )}
