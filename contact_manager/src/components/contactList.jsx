@@ -39,13 +39,13 @@ export default function ContactList({
   const [currentPage, setCurrentPage] = useState(1);
   const contactsPerPage = 10;
 
-  // Calculate pagination
+  // Calculate pagination boundaries for slicing contacts array
   const totalPages = Math.ceil(contacts.length / contactsPerPage);
   const startIndex = (currentPage - 1) * contactsPerPage;
   const endIndex = startIndex + contactsPerPage;
   const currentContacts = contacts.slice(startIndex, endIndex);
 
-  // Reset page if currentPage exceeds totalPages (e.g., after search or delete)
+  // Reset current page to 1 if it exceeds total pages (e.g., after deleting or filtering contacts)
   useEffect(() => {
     if (currentPage > totalPages && totalPages > 0) {
       setCurrentPage(1);
@@ -81,7 +81,7 @@ export default function ContactList({
   const handleConfirmDelete = () => {
     if (selectedContact && onDeleteContact) {
       onDeleteContact(selectedContact.id);
-      // Adjust page if current page becomes empty
+      // Adjust page if the current page becomes empty after deletion
       if (currentContacts.length === 1 && currentPage > 1) {
         setCurrentPage(currentPage - 1);
       }
@@ -89,6 +89,7 @@ export default function ContactList({
     handleCloseDialog();
   };
 
+  // Generate initials from contact name for avatar display
   const getInitials = (name) => {
     return name
       .split(" ")
@@ -98,18 +99,28 @@ export default function ContactList({
       .slice(0, 2);
   };
 
+  // Assign a color to avatar based on first character of name
   const getAvatarColor = (name) => {
-    const colors = ['#FF6B6B', '#4ECDC4', '#45B7D1', '#FFA07A', '#98D8C8', '#F7DC6F', '#BB8FCE', '#85C1E9'];
+    const colors = [
+      "#1A3C5A",
+      "#2AB7CA",
+      "#FE6D73",
+      "#4B5563",
+      "#10B981",
+      "#F59E0B",
+      "#8B5CF6",
+      "#EC4899",
+    ];
     const index = name.charCodeAt(0) % colors.length;
     return colors[index];
   };
 
   return (
     <Box sx={{ width: "100%", display: "flex", flexDirection: "column", height: "100%" }}>
-      {/* Contact List */}
+      {/* Contact List: Displays paginated contacts with a scrollable container */}
       <Box sx={{ flex: 1, maxHeight: "400px", overflowY: "auto", mb: 2 }}>
         {currentContacts.length === 0 ? (
-          <Typography sx={{ textAlign: "center", color: "#64748B", py: 4 }}>
+          <Typography sx={{ textAlign: "center", color: "#6B7280", py: 4 }}>
             No contacts found.
           </Typography>
         ) : (
@@ -118,12 +129,12 @@ export default function ContactList({
               <Card
                 sx={{
                   mb: 2,
-                  borderRadius: 3,
-                  boxShadow: "0 2px 12px rgba(0,0,0,0.08)",
-                  border: "1px solid rgba(0,0,0,0.06)",
+                  borderRadius: 2,
+                  boxShadow: "0 2px 8px rgba(0,0,0,0.1)",
+                  border: "1px solid #E5E7EB",
                   transition: "all 0.3s ease",
                   "&:hover": {
-                    boxShadow: "0 4px 20px rgba(0,0,0,0.12)",
+                    boxShadow: "0 4px 12px rgba(0,0,0,0.15)",
                     transform: "translateY(-2px)",
                   },
                 }}
@@ -136,23 +147,22 @@ export default function ContactList({
                           width: 48,
                           height: 48,
                           backgroundColor: getAvatarColor(contact.name),
-                          color: "white",
+                          color: "#FFFFFF",
                           fontWeight: 600,
                           fontSize: "1.1rem",
                           mr: 2,
-                          boxShadow: "0 2px 8px rgba(0,0,0,0.15)",
+                          boxShadow: "0 2px 6px rgba(0,0,0,0.1)",
                         }}
                       >
                         {getInitials(contact.name)}
                       </Avatar>
-
                       <Box sx={{ flex: 1, minWidth: 0 }}>
                         <Box sx={{ display: "flex", alignItems: "center", mb: 0.5 }}>
                           <Typography
                             variant="h6"
                             sx={{
                               fontWeight: 600,
-                              color: "#2C3E50",
+                              color: "#1A3C5A",
                               fontSize: "1.1rem",
                               mr: 1,
                               overflow: "hidden",
@@ -167,8 +177,8 @@ export default function ContactList({
                               label="Favorite"
                               size="small"
                               sx={{
-                                backgroundColor: "#FFF3E0",
-                                color: "#F57C00",
+                                backgroundColor: "#FFF1F2",
+                                color: "#FE6D73",
                                 fontSize: "0.7rem",
                                 height: 20,
                                 fontWeight: 500,
@@ -179,7 +189,7 @@ export default function ContactList({
                         <Typography
                           variant="body2"
                           sx={{
-                            color: "#64748B",
+                            color: "#6B7280",
                             fontSize: "0.9rem",
                             overflow: "hidden",
                             textOverflow: "ellipsis",
@@ -190,17 +200,16 @@ export default function ContactList({
                         </Typography>
                       </Box>
                     </Box>
-
                     <Box sx={{ display: "flex", alignItems: "center", gap: 0.5, ml: 2 }}>
                       <Tooltip title={contact.favourite ? "Remove from favorites" : "Add to favorites"}>
                         <IconButton
                           onClick={() => onToggleFavorite(contact.id)}
                           size="small"
                           sx={{
-                            color: contact.favourite ? "#F59E0B" : "#94A3B8",
+                            color: contact.favourite ? "#FE6D73" : "#9CA3AF",
                             "&:hover": {
-                              backgroundColor: contact.favourite ? "#FEF3C7" : "#F1F5F9",
-                              color: contact.favourite ? "#D97706" : "#64748B",
+                              backgroundColor: contact.favourite ? "#FFF1F2" : "#F3F4F6",
+                              color: contact.favourite ? "#F43F5E" : "#6B7280",
                             },
                             transition: "all 0.2s ease",
                           }}
@@ -208,7 +217,6 @@ export default function ContactList({
                           {contact.favourite ? <FavoriteIcon fontSize="small" /> : <FavoriteBorderIcon fontSize="small" />}
                         </IconButton>
                       </Tooltip>
-
                       <Tooltip title="View details">
                         <Button
                           size="small"
@@ -219,13 +227,13 @@ export default function ContactList({
                             px: 1.5,
                             py: 0.5,
                             borderRadius: 2,
-                            backgroundColor: "#F8FAFC",
-                            color: "#475569",
+                            backgroundColor: "#F9FAFB",
+                            color: "#4B5563",
                             fontSize: "0.8rem",
                             fontWeight: 500,
                             "&:hover": {
-                              backgroundColor: "#E2E8F0",
-                              color: "#334155",
+                              backgroundColor: "#E0F2FE",
+                              color: "#1A3C5A",
                             },
                             transition: "all 0.2s ease",
                           }}
@@ -242,13 +250,13 @@ export default function ContactList({
         )}
       </Box>
 
-      {/* Simplified Pagination Section */}
+      {/* Pagination: Displays navigation for paginated contacts if more than one page exists */}
       {totalPages > 1 && (
         <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center", py: 1, gap: 2 }}>
           <Typography
             variant="body2"
             sx={{
-              color: "#64748B",
+              color: "#6B7280",
               fontSize: "0.8rem",
             }}
           >
@@ -259,30 +267,26 @@ export default function ContactList({
             page={currentPage}
             onChange={handlePageChange}
             size="small"
-            aria-label="pagination navigation"
             sx={{
               "& .MuiPaginationItem-root": {
-                color: "#64748B",
+                color: "#6B7280",
                 fontSize: "0.8rem",
                 minWidth: 28,
                 height: 28,
                 "&:hover": {
-                  backgroundColor: "#F1F5F9",
+                  backgroundColor: "#F3F4F6",
                 },
                 "&.Mui-selected": {
-                  backgroundColor: "#3B82F6",
-                  color: "white",
+                  backgroundColor: "#2AB7CA",
+                  color: "#FFFFFF",
                   "&:hover": {
-                    backgroundColor: "#2563EB",
+                    backgroundColor: "#22D3EE",
                   },
                 },
                 "&.MuiPaginationItem-previousNext": {
-                  color: currentPage === 1 || currentPage === totalPages ? "#CBD5E1" : "#2563EB",
-                  fontSize: "1rem", // Slightly larger for emphasis
-                  minWidth: 32,
-                  height: 32,
+                  color: currentPage === 1 || currentPage === totalPages ? "#D1D5DB" : "#2AB7CA",
                   "&:hover": {
-                    backgroundColor: currentPage === 1 || currentPage === totalPages ? "transparent" : "#EBF8FF",
+                    backgroundColor: currentPage === 1 || currentPage === totalPages ? "transparent" : "#E0F2FE",
                   },
                 },
               },
@@ -291,7 +295,7 @@ export default function ContactList({
         </Box>
       )}
 
-      {/* Details Dialog */}
+      {/* Details Dialog: Shows detailed contact information with edit/delete options */}
       <Dialog
         open={openDialog && !deleteConfirmOpen}
         onClose={handleCloseDialog}
@@ -299,8 +303,8 @@ export default function ContactList({
         fullWidth
         PaperProps={{
           sx: {
-            borderRadius: 4,
-            boxShadow: "0 20px 40px rgba(0,0,0,0.1)",
+            borderRadius: 3,
+            boxShadow: "0 10px 30px rgba(0,0,0,0.1)",
           },
         }}
       >
@@ -308,16 +312,15 @@ export default function ContactList({
           sx={{
             textAlign: "center",
             pb: 1,
-            backgroundColor: "#F8FAFC",
-            borderBottom: "1px solid #E2E8F0",
+            backgroundColor: "#1A3C5A",
+            color: "#FFFFFF",
           }}
         >
-          <Typography variant="h5" sx={{ fontWeight: 600, color: "#1E293B" }}>
+          <Typography variant="h5" sx={{ fontWeight: 600 }}>
             Contact Details
           </Typography>
         </DialogTitle>
-
-        <DialogContent sx={{ p: 3 }}>
+        <DialogContent sx={{ p: 3, backgroundColor: "#F9FAFB" }}>
           {selectedContact && (
             <Box sx={{ textAlign: "center" }}>
               <Avatar
@@ -327,31 +330,28 @@ export default function ContactList({
                   mx: "auto",
                   mb: 3,
                   backgroundColor: getAvatarColor(selectedContact.name),
-                  color: "white",
+                  color: "#FFFFFF",
                   fontSize: "2rem",
                   fontWeight: 600,
-                  boxShadow: "0 8px 24px rgba(0,0,0,0.15)",
+                  boxShadow: "0 4px 12px rgba(0,0,0,0.1)",
                 }}
               >
                 {getInitials(selectedContact.name)}
               </Avatar>
-
-              <Typography variant="h4" sx={{ fontWeight: 600, color: "#1E293B", mb: 1 }}>
+              <Typography variant="h4" sx={{ fontWeight: 600, color: "#1A3C5A", mb: 1 }}>
                 {selectedContact.name}
               </Typography>
-
               {selectedContact.favourite && (
                 <Chip
                   label="★ Favorite Contact"
                   sx={{
-                    backgroundColor: "#FEF3C7",
-                    color: "#D97706 《#F57C00》",
+                    backgroundColor: "#FFF1F2",
+                    color: "#FE6D73",
                     fontWeight: 600,
                     mb: 3,
                   }}
                 />
               )}
-
               <Box
                 sx={{
                   display: "flex",
@@ -370,24 +370,22 @@ export default function ContactList({
                       width: 40,
                       height: 40,
                       borderRadius: 2,
-                      backgroundColor: "#EBF8FF",
-                      color: "#2563EB",
+                      backgroundColor: "#E0F2FE",
+                      color: "#1A3C5A",
                     }}
                   >
                     <PersonIcon />
                   </Box>
                   <Box>
-                    <Typography variant="body2" sx={{ color: "#64748B", fontSize: "0.9rem" }}>
+                    <Typography variant="body2" sx={{ color: "#6B7280", fontSize: "0.9rem" }}>
                       Full Name
                     </Typography>
-                    <Typography variant="body1" sx={{ fontWeight: 500, color: "#1E293B" }}>
+                    <Typography variant="body1" sx={{ fontWeight: 500, color: "#1A3C5A" }}>
                       {selectedContact.name}
                     </Typography>
                   </Box>
                 </Box>
-
-                <Divider sx={{ my: 1 }} />
-
+                <Divider sx={{ my: 1, borderColor: "#E5E7EB" }} />
                 <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
                   <Box
                     sx={{
@@ -397,24 +395,22 @@ export default function ContactList({
                       width: 40,
                       height: 40,
                       borderRadius: 2,
-                      backgroundColor: "#F0FDF4",
-                      color: "#16A34A",
+                      backgroundColor: "#D1FAE5",
+                      color: "#10B981",
                     }}
                   >
                     <EmailIcon />
                   </Box>
                   <Box>
-                    <Typography variant="body2" sx={{ color: "#64748B", fontSize: "0.9rem" }}>
+                    <Typography variant="body2" sx={{ color: "#6B7280", fontSize: "0.9rem" }}>
                       Email Address
                     </Typography>
-                    <Typography variant="body1" sx={{ fontWeight: 500, color: "#1E293B" }}>
+                    <Typography variant="body1" sx={{ fontWeight: 500, color: "#1A3C5A" }}>
                       {selectedContact.email}
                     </Typography>
                   </Box>
                 </Box>
-
-                <Divider sx={{ my: 1 }} />
-
+                <Divider sx={{ my: 1, borderColor: "#E5E7EB" }} />
                 <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
                   <Box
                     sx={{
@@ -424,24 +420,22 @@ export default function ContactList({
                       width: 40,
                       height: 40,
                       borderRadius: 2,
-                      backgroundColor: "#FEF3C7",
-                      color: "#D97706",
+                      backgroundColor: "#FFF1F2",
+                      color: "#FE6D73",
                     }}
                   >
                     <PhoneIcon />
                   </Box>
                   <Box>
-                    <Typography variant="body2" sx={{ color: "#64748B", fontSize: "0.9rem" }}>
+                    <Typography variant="body2" sx={{ color: "#6B7280", fontSize: "0.9rem" }}>
                       Phone Number
                     </Typography>
-                    <Typography variant="body1" sx={{ fontWeight: 500, color: "#1E293B" }}>
+                    <Typography variant="body1" sx={{ fontWeight: 500, color: "#1A3C5A" }}>
                       {selectedContact.phone || "Not provided"}
                     </Typography>
                   </Box>
                 </Box>
-
-                <Divider sx={{ my: 1 }} />
-
+                <Divider sx={{ my: 1, borderColor: "#E5E7EB" }} />
                 <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
                   <Box
                     sx={{
@@ -451,17 +445,17 @@ export default function ContactList({
                       width: 40,
                       height: 40,
                       borderRadius: 2,
-                      backgroundColor: "#FDF2F8",
-                      color: "#EC4899",
+                      backgroundColor: "#F3E8FF",
+                      color: "#8B5CF6",
                     }}
                   >
                     <LocationOnIcon />
                   </Box>
                   <Box>
-                    <Typography variant="body2" sx={{ color: "#64748B", fontSize: "0.9rem" }}>
+                    <Typography variant="body2" sx={{ color: "#6B7280", fontSize: "0.9rem" }}>
                       Address
                     </Typography>
-                    <Typography variant="body1" sx={{ fontWeight: 500, color: "#1E293B" }}>
+                    <Typography variant="body1" sx={{ fontWeight: 500, color: "#1A3C5A" }}>
                       {selectedContact.address || "Not provided"}
                     </Typography>
                   </Box>
@@ -470,8 +464,7 @@ export default function ContactList({
             </Box>
           )}
         </DialogContent>
-
-        <DialogActions sx={{ p: 3, gap: 2, backgroundColor: "#F8FAFC" }}>
+        <DialogActions sx={{ p: 3, gap: 2, backgroundColor: "#F9FAFB" }}>
           <Button
             onClick={handleEditClick}
             variant="contained"
@@ -479,17 +472,16 @@ export default function ContactList({
             sx={{
               flex: 1,
               py: 1.5,
-              backgroundColor: "#2563EB",
-              color: "#fff",
+              backgroundColor: "#2AB7CA",
+              color: "#FFFFFF",
               fontWeight: 600,
-              borderRadius: 3,
-              "&:hover": { backgroundColor: "#1D4ED8" },
+              borderRadius: 2,
+              "&:hover": { backgroundColor: "#22D3EE" },
               textTransform: "none",
             }}
           >
             Edit Contact
           </Button>
-
           <Button
             onClick={handleDeleteClick}
             variant="contained"
@@ -497,30 +489,29 @@ export default function ContactList({
             sx={{
               flex: 1,
               py: 1.5,
-              backgroundColor: "#DC2626",
-              color: "#fff",
+              backgroundColor: "#FE6D73",
+              color: "#FFFFFF",
               fontWeight: 600,
-              borderRadius: 3,
-              "&:hover": { backgroundColor: "#B91C1C" },
+              borderRadius: 2,
+              "&:hover": { backgroundColor: "#F43F5E" },
               textTransform: "none",
             }}
           >
             Delete Contact
           </Button>
-
           <Button
             onClick={handleCloseDialog}
             variant="outlined"
             sx={{
               flex: 1,
               py: 1.5,
-              borderColor: "#D1D5DB",
+              borderColor: "#E5E7EB",
               color: "#6B7280",
               fontWeight: 600,
-              borderRadius: 3,
+              borderRadius: 2,
               "&:hover": {
-                borderColor: "#9CA3AF",
-                backgroundColor: "#F9FAFB",
+                borderColor: "#D1D5DB",
+                backgroundColor: "#F3F4F6",
               },
               textTransform: "none",
             }}
@@ -530,7 +521,7 @@ export default function ContactList({
         </DialogActions>
       </Dialog>
 
-      {/* Delete Confirmation Dialog */}
+      {/* Delete Confirmation Dialog: Prompts user to confirm contact deletion */}
       <Dialog
         open={deleteConfirmOpen}
         onClose={handleCloseDialog}
@@ -538,12 +529,12 @@ export default function ContactList({
         fullWidth
         PaperProps={{
           sx: {
-            borderRadius: 4,
-            boxShadow: "0 20px 40px rgba(0,0,0,0.15)",
+            borderRadius: 3,
+            boxShadow: "0 10px 30px rgba(0,0,0,0.1)",
           },
         }}
       >
-        <DialogTitle sx={{ textAlign: "center", pb: 1 }}>
+        <DialogTitle sx={{ textAlign: "center", pb: 1, backgroundColor: "#1A3C5A", color: "#FFFFFF" }}>
           <Box
             sx={{
               display: "flex",
@@ -552,43 +543,41 @@ export default function ContactList({
               width: 64,
               height: 64,
               borderRadius: "50%",
-              backgroundColor: "#FEE2E2",
-              color: "#DC2626",
+              backgroundColor: "#FFF1F2",
+              color: "#FE6D73",
               mx: "auto",
               mb: 2,
             }}
           >
             <DeleteIcon sx={{ fontSize: 32 }} />
           </Box>
-          <Typography variant="h5" sx={{ fontWeight: 600, color: "#1E293B" }}>
+          <Typography variant="h5" sx={{ fontWeight: 600 }}>
             Delete Contact
           </Typography>
         </DialogTitle>
-
-        <DialogContent sx={{ textAlign: "center", px: 3, pb: 2 }}>
-          <Typography sx={{ color: "#64748B", fontSize: "1.1rem", lineHeight: 1.6 }}>
+        <DialogContent sx={{ textAlign: "center", px: 3, pb: 2, backgroundColor: "#F9FAFB" }}>
+          <Typography sx={{ color: "#6B7280", fontSize: "1.1rem", lineHeight: 1.6 }}>
             Are you sure you want to delete{" "}
-            <strong style={{ color: "#1E293B" }}>"{selectedContact?.name}"</strong>?
+            <strong style={{ color: "#1A3C5A" }}>"{selectedContact?.name}"</strong>?
           </Typography>
-          <Typography sx={{ color: "#64748B", fontSize: "0.95rem", mt: 1 }}>
+          <Typography sx={{ color: "#6B7280", fontSize: "0.95rem", mt: 1 }}>
             This action cannot be undone.
           </Typography>
         </DialogContent>
-
-        <DialogActions sx={{ p: 3, gap: 2 }}>
+        <DialogActions sx={{ p: 3, gap: 2, backgroundColor: "#F9FAFB" }}>
           <Button
             onClick={handleCloseDialog}
             variant="outlined"
             sx={{
               flex: 1,
               py: 1.5,
-              borderColor: "#D1D5DB",
+              borderColor: "#E5E7EB",
               color: "#6B7280",
               fontWeight: 600,
-              borderRadius: 3,
+              borderRadius: 2,
               "&:hover": {
-                borderColor: "#9CA3AF",
-                backgroundColor: "#F9FAFB",
+                borderColor: "#D1D5DB",
+                backgroundColor: "#F3F4F6",
               },
               textTransform: "none",
             }}
@@ -601,11 +590,11 @@ export default function ContactList({
             sx={{
               flex: 1,
               py: 1.5,
-              backgroundColor: "#DC2626",
-              color: "#fff",
+              backgroundColor: "#FE6D73",
+              color: "#FFFFFF",
               fontWeight: 600,
-              borderRadius: 3,
-              "&:hover": { backgroundColor: "#B91C1C" },
+              borderRadius: 2,
+              "&:hover": { backgroundColor: "#F43F5E" },
               textTransform: "none",
             }}
           >

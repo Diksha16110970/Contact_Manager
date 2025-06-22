@@ -25,18 +25,18 @@ export default function ContactForm({
   onAddSuccess,
   onUpdateSuccess,
   onClose,
-}) 
-{
+}) {
+  // React hook form setup with memoized default values to avoid stale form state
   const defaultValues = useMemo(
-  () => ({
-    name: currentUser?.name || "",
-    email: currentUser?.email || "",
-    phone: currentUser?.phone || "",
-    address: currentUser?.address || "",
-    isFavourite: currentUser?.favourite || false,
-  }),
-  [currentUser]
-);
+    () => ({
+      name: currentUser?.name || "",
+      email: currentUser?.email || "",
+      phone: currentUser?.phone || "",
+      address: currentUser?.address || "",
+      isFavourite: currentUser?.favourite || false,
+    }),
+    [currentUser]
+  );
 
   const {
     handleSubmit,
@@ -45,13 +45,14 @@ export default function ContactForm({
     setValue,
     formState: { errors },
   } = useForm({ defaultValues });
-  
+
   console.log(`currentUser == ${JSON.stringify(currentUser)}`);
   const addContactMutation = useAddContact();
   const updateContactMutation = useUpdateContact();
   const queryClient = useQueryClient();
   const { enqueueSnackbar } = useSnackbar();
 
+  // Reset form when dialog is closed to ensure clean slate for new contact
   useEffect(() => {
     if (!open) {
       reset({
@@ -63,6 +64,8 @@ export default function ContactForm({
       });
     }
   }, [open, reset]);
+
+  // Prefill form values when editing an existing contact
 
   useEffect(() => {
     if (currentUser && open) {
@@ -78,9 +81,10 @@ export default function ContactForm({
 
   const handleClose = () => {
     setOpen(false);
-    onClose?.(); // ✅ notify parent to clear currentUser
+    onClose?.(); //  notify parent to clear currentUser
   };
 
+  // Unified form submission logic for both add and update actions
   const onSubmit = async (data) => {
     try {
       if (currentUser) {
@@ -95,9 +99,7 @@ export default function ContactForm({
           },
           {
             onSuccess: () => {
-              // enqueueSnackbar("Contact updated successfully!", {
-              //   variant: "success",
-              // });
+              
               onUpdateSuccess?.();
               queryClient.refetchQueries(["contacts", 1, ""]);
               setOpen(false);
@@ -111,7 +113,6 @@ export default function ContactForm({
       } else {
         addContactMutation.mutate(
           {
-            id: Date.now(),
             name: data.name,
             email: data.email,
             phone: data.phone,
@@ -120,9 +121,7 @@ export default function ContactForm({
           },
           {
             onSuccess: () => {
-              // enqueueSnackbar("Contact added successfully!", {
-              //   variant: "success",
-              // });
+              
               onAddSuccess?.();
               queryClient.refetchQueries(["contacts", 1, ""]);
               setOpen(false);
@@ -163,7 +162,7 @@ export default function ContactForm({
             alignItems: "center",
             px: 2,
             py: 1,
-            background: "#4FC3F7",
+            backgroundColor: "#1A3C5A",
             color: "#fff",
             borderBottom: "1px solid #ccc",
           }}
@@ -234,7 +233,13 @@ export default function ContactForm({
           <Controller
             name="phone"
             control={control}
-            rules={{ required: "Phone number is required" }}
+            rules={{
+              required: "Phone number is required",
+              pattern: {
+                value: /^[0-9]{10}$/,      // Only allows exactly 10 digit numbers
+                message: "Phone number must be exactly 10 digits",
+              },
+            }}
             render={({ field }) => (
               <TextField
                 {...field}
@@ -246,6 +251,7 @@ export default function ContactForm({
               />
             )}
           />
+
           <Controller
             name="address"
             control={control}
@@ -270,8 +276,8 @@ export default function ContactForm({
               <FormControlLabel
                 control={
                   <Checkbox
-                    checked={field.value} // ✅ make checkbox controlled
-                    onChange={(e) => field.onChange(e.target.checked)} // ✅ update correctly
+                    checked={field.value} // make checkbox controlled
+                    onChange={(e) => field.onChange(e.target.checked)} // update correctly
                   />
                 }
                 label="Mark as Favourite"
@@ -293,9 +299,9 @@ export default function ContactForm({
             variant="contained"
             onClick={handleSubmit(onSubmit)}
             sx={{
-              backgroundColor: "#4FC3F7",
+              backgroundColor: "#1A3C5A",
               color: "#fff",
-              "&:hover": { backgroundColor: "#29B6F6" },
+              "&:hover": {},
               borderRadius: "4px",
             }}
           >

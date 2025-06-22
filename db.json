@@ -6,7 +6,7 @@
       "email": "diksha.nagdevate@pinnacle.in",
       "phone": "3242",
       "address": "sfd1234",
-      "favourite": false
+      "favourite": true
     },
     {
       "id": "1750527084610",
@@ -14,7 +14,7 @@
       "email": "pooja@gmail.com",
       "phone": "3456",
       "address": "hytfgh",
-      "favourite": false
+      "favourite": true
     },
     {
       "id": "1750527085683",
@@ -22,7 +22,7 @@
       "email": "pooja@gmail.com",
       "phone": "3456",
       "address": "hytfgh",
-      "favourite": false
+      "favourite": true
     },
     {
       "id": "1750527098993",
@@ -62,7 +62,7 @@
       "email": "sunit.patil@pinnacle.in",
       "phone": "2345",
       "address": "Manewada",
-      "favourite": false
+      "favourite": true
     },
     {
       "id": "1750530849727",
@@ -95,6 +95,14 @@
       "phone": "1234",
       "address": "Manewada",
       "favourite": true
+    },
+    {
+      "id": "6fef",
+      "name": "f",
+      "email": "fgh@gmail.com",
+      "phone": "3435435",
+      "address": "f",
+      "favourite": false
     }
   ]
 }

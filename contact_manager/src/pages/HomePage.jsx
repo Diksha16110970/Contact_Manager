@@ -31,7 +31,6 @@ import { useSnackbar } from "notistack";
 export default function HomePage() {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
-  // const isTablet = useMediaQuery(theme.breakpoints.down('md'));
   
   const {
     searchInput,
@@ -426,7 +425,7 @@ export default function HomePage() {
                 fullWidth
                 sx={{
                   py: 1.5,
-                  background: "linear-gradient(135deg, #3b82f6 0%, #2563eb 100%)",
+                  backgroundColor: "#1A3C5A",
                   color: "#fff",
                   fontWeight: 600,
                   fontSize: "1rem",
@@ -434,7 +433,7 @@ export default function HomePage() {
                   textTransform: "none",
                   boxShadow: "0 4px 12px rgba(59, 130, 246, 0.25)",
                   "&:hover": {
-                    background: "linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%)",
+                    // background: "linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%)",
                     boxShadow: "0 6px 16px rgba(59, 130, 246, 0.35)",
                     transform: "translateY(-1px)",
                   },
