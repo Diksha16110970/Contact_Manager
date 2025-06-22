@@ -1,0 +1,108 @@
+{
+  "contacts": [
+    {
+      "id": "1750521004679",
+      "name": "diksha123",
+      "email": "diksha.nagdevate@pinnacle.in",
+      "phone": "3242",
+      "address": "sfd1234",
+      "favourite": true
+    },
+    {
+      "id": "1750527084610",
+      "name": "p",
+      "email": "pooja@gmail.com",
+      "phone": "3456",
+      "address": "hytfgh",
+      "favourite": true
+    },
+    {
+      "id": "1750527085683",
+      "name": "p",
+      "email": "pooja@gmail.com",
+      "phone": "3456",
+      "address": "hytfgh",
+      "favourite": true
+    },
+    {
+      "id": "1750527098993",
+      "name": "p123123456789",
+      "email": "pooja@gmail.com",
+      "phone": "3456",
+      "address": "hytfgh",
+      "favourite": false
+    },
+    {
+      "id": "1750527145635",
+      "name": "XYZ",
+      "email": "sunit.patil@pinnacle.in",
+      "phone": "324567",
+      "address": "Manewada",
+      "favourite": false
+    },
+    {
+      "id": "1750527270101",
+      "name": "ae112234",
+      "email": "sunit.patil@pinnacle.in",
+      "phone": "324",
+      "address": "Manewada",
+      "favourite": false
+    },
+    {
+      "id": "1750527627161",
+      "name": "h",
+      "email": "sunit.patil@pinnacle.in",
+      "phone": "2345",
+      "address": "Manewada",
+      "favourite": false
+    },
+    {
+      "id": "1750527803921",
+      "name": "b123",
+      "email": "sunit.patil@pinnacle.in",
+      "phone": "2345",
+      "address": "Manewada",
+      "favourite": true
+    },
+    {
+      "id": "1750530849727",
+      "name": "Sunit123",
+      "email": "sunit.patil@pinnacle.in",
+      "phone": "12345",
+      "address": "Manewada",
+      "favourite": true
+    },
+    {
+      "id": "1750572029212",
+      "name": "ved",
+      "email": "sunit.patil@pinnacle.in",
+      "phone": "1234",
+      "address": "Manewada",
+      "favourite": false
+    },
+    {
+      "id": "1750572029213",
+      "name": "ved1",
+      "email": "sunit.patil@pinnacle.in",
+      "phone": "1234",
+      "address": "Manewada",
+      "favourite": true
+    },
+    {
+      "id": "1750572029214",
+      "name": "ved2",
+      "email": "sunit.patil@pinnacle.in",
+      "phone": "1234",
+      "address": "Manewada",
+      "favourite": true
+    },
+    {
+      "id": "b92c",
+      "name": "rty",
+      "email": "sunit.patil@pinnacle.in",
+      "phone": "2345234351",
+      "address": "Manewada",
+      "favourite": true
+    }
+  ]
+}
