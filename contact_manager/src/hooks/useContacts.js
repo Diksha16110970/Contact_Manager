@@ -10,7 +10,7 @@ import {
 export const useContacts = (search) => {
   return useQuery({
     queryKey: ["contacts", search],
-    queryFn: () => fetchContacts({ search }), // fetches all
+    queryFn: () => fetchContacts({ search }),
     keepPreviousData: true,
   });
 };
