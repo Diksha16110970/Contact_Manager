@@ -6,13 +6,15 @@ import {
   deleteContact,
 } from "../api/contactApi";
 
-export const useContacts = (page, search) => {
+// useContacts.js
+export const useContacts = (search) => {
   return useQuery({
-    queryKey: ["contacts", page, search],
-    queryFn: () => fetchContacts({ page, limit: 10, search }),
+    queryKey: ["contacts", search],
+    queryFn: () => fetchContacts({ search }), // fetches all
     keepPreviousData: true,
   });
 };
+
 
 export const useAddContact = () => {
   const queryClient = useQueryClient();
